@@ -4,7 +4,7 @@
 #include <unistd.h> // getcwd, getuid, gethostname
 #include <pwd.h> // getpwuid
 #include <sys/types.h> // getuid, getpwuid
-#include <limits.h>
+#include <limits.h> // for PATH_MAX
 
 #define MAX_BUFFER 1024
 
