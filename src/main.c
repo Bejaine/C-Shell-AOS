@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../include/prompt.h"
 #include "../include/input.h"
+#include "../include/builtins.h"
 
 int main()
 {
@@ -28,14 +30,32 @@ int main()
         int arg_count = tokenize_input(input, args);
 
         // debug: parsing verification
-        if (arg_count > 0)
+        // if (arg_count > 0)
+        // {
+        //     printf("Debug: Parsed Tokens\n");
+        //     for (int i = 0; i < arg_count; i++)
+        //     {
+        //         printf("args[%d]: '%s'\n", i, args[i]);
+        //     }
+        //     printf("\n");
+        // }
+
+        // if the input is an empty line, starting the loop over
+        if (arg_count == 0)
         {
-            printf("Debug: Parsed Tokens\n");
-            for (int i = 0; i < arg_count; i++)
-            {
-                printf("args[%d]: '%s'\n", i, args[i]);
-            }
-            printf("\n");
+            free(input);
+            continue;
+        }
+
+        // checking for built-in commands
+        if (strcmp(args[0], "echo") == 0)
+        {
+            execute_echo(args);
+        } 
+        else
+        {
+            // catching commands that do not exist or aren't implemented
+            printf("Command doesn't exist...\n");
         }
 
         // freeing the allocated memory before the next loop iteration

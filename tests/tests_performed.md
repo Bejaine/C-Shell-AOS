@@ -29,3 +29,16 @@ Exiting shell...
 user1@DESKTOP-6R849NP:~/aos/src$
 ```
 Outputs for the tests obtained correctly
+
+### ECHO
+
+Test input with multiple spaces between words in echo
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> echo      all       the      best
+all the best
+<user1@DESKTOP-6R849NP:~> echo all the best
+all the best
+<user1@DESKTOP-6R849NP:~>
+```
+Output for the test obtained correctly
