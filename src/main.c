@@ -52,6 +52,10 @@ int main()
         {
             execute_echo(args);
         } 
+        else if (strcmp(args[0], "pwd") == 0)
+        {
+            execute_pwd();
+        }
         else
         {
             // catching commands that do not exist or aren't implemented

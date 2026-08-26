@@ -42,3 +42,15 @@ all the best
 <user1@DESKTOP-6R849NP:~>
 ```
 Output for the test obtained correctly
+
+### PWD
+
+Testing current working directory with pwd command as well as multiple inputs
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> pwd
+/home/user1/aos/C-Shell-AOS/src
+<user1@DESKTOP-6R849NP:~> pwd cd test
+/home/user1/aos/C-Shell-AOS/src
+```
+Output for the test obtained correctly
