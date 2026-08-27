@@ -7,4 +7,7 @@ void init_shell_home();
 // displaying the shell prompt
 void display_prompt();
 
+// getting the shell's home directory path from prompt.c
+const char* get_shell_home(void);
+
 #endif

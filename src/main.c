@@ -56,10 +56,14 @@ int main()
         {
             execute_pwd();
         }
+        else if (strcmp(args[0], "cd") == 0)
+        {
+            execute_cd(args);
+        }
         else
         {
             // catching commands that do not exist or aren't implemented
-            printf("Command doesn't exist...\n");
+            printf("command doesn't exist...\n");
         }
 
         // freeing the allocated memory before the next loop iteration

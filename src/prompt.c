@@ -82,3 +82,9 @@ void display_prompt(void)
     
     fflush(stdout); // forcing stdout buffer to immediately display without waiting for input
 }
+
+// to get the home directory of the shell for the cd command
+const char* get_shell_home(void)
+{
+    return home_dir;
+}
