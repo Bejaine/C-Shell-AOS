@@ -59,7 +59,8 @@ void init_history()
         // making sure only 20 past commands from .history are initialised into the history_list array
         if (history_count < MAX_HISTORY)
         {
-            strncpy(history_list[history_count], buffer, MAX_CMD_LEN);
+            strncpy(history_list[history_count], buffer, MAX_CMD_LEN - 1);
+            history_list[history_count][MAX_CMD_LEN - 1] = '\0';
             history_count++;
         }
     }
