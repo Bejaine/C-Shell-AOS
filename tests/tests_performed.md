@@ -72,3 +72,57 @@ cd: no previous directory
 <user1@DESKTOP-6R849NP:~>
 ```
 Outputs for the test obtained correctly
+
+### HISTORY
+
+Invoking the shell in a directory without shell history and running tests such as repeated commands and invoking after exiting the shell
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ ls -a
+.  ..  builtins.c  history.c  input.c  main.c  prompt.c
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> history
+history
+<user1@DESKTOP-6R849NP:~> pwd
+/home/user1/aos/C-Shell-AOS/src
+<user1@DESKTOP-6R849NP:~> echo hello
+hello
+<user1@DESKTOP-6R849NP:~> cd ..
+<user1@DESKTOP-6R849NP:/home/user1/aos/C-Shell-AOS> cd -
+/home/user1/aos/C-Shell-AOS/src
+<user1@DESKTOP-6R849NP:~> history
+history
+pwd
+echo hello
+cd ..
+cd -
+history
+<user1@DESKTOP-6R849NP:~> pwd
+/home/user1/aos/C-Shell-AOS/src
+<user1@DESKTOP-6R849NP:~> pwd
+/home/user1/aos/C-Shell-AOS/src
+<user1@DESKTOP-6R849NP:~> history
+history
+pwd
+echo hello
+cd ..
+cd -
+history
+pwd
+history
+<user1@DESKTOP-6R849NP:~> 
+Exiting shell...
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ ls -a
+.  ..  .history  builtins.c  history.c  input.c  main.c  prompt.c  shell
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> history
+history
+pwd
+echo hello
+cd ..
+cd -
+history
+pwd
+history
+<user1@DESKTOP-6R849NP:~> 
+```
+Outputs for the tests obtained correctly

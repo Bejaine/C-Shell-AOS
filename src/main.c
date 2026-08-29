@@ -4,12 +4,16 @@
 #include "../include/prompt.h"
 #include "../include/input.h"
 #include "../include/builtins.h"
+#include "../include/history.h"
 
 int main()
 {
 
     // setting shell home directory
     init_shell_home();
+
+    // loading history from the history
+    init_history();
 
     // displaying the prompt in a loop
     while(1)
@@ -24,6 +28,10 @@ int main()
             printf("\nExiting shell...\n");
             break; 
         }
+
+        // obtaining the input command before tokenising for history command
+        char raw_input[4096];
+        strncpy(raw_input, input, sizeof(raw_input));
 
         // tokenizing input
         char* args[MAX_ARGS];
@@ -47,6 +55,9 @@ int main()
             continue;
         }
 
+        // adding the command to history after checking if it was an empty line
+        add_history(raw_input);
+
         // checking for built-in commands
         if (strcmp(args[0], "echo") == 0)
         {
@@ -59,6 +70,10 @@ int main()
         else if (strcmp(args[0], "cd") == 0)
         {
             execute_cd(args);
+        }
+        else if (strcmp(args[0], "history") == 0)
+        {
+            execute_history();
         }
         else
         {
