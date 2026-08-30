@@ -142,3 +142,17 @@ fakecommand: No such file or directory
 <user1@DESKTOP-6R849NP:~> 
 ```
 Outputs for the external commands through execvp obtained correctly and parent shall waits 3 seconds as specified in the child process through waitpid
+
+### BACKGROUND PROCESS EXECUTION
+
+Test performed where both background and foreground process commands were given
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c ../src/execute.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> sleep 3
+<user1@DESKTOP-6R849NP:~> sleep 3 &
+Background Process PID: 162988
+<user1@DESKTOP-6R849NP:~> sleep 3 &
+Background Process PID: 163058
+<user1@DESKTOP-6R849NP:~>
+```
+Outputs for the background process invocation obtained correctly as the shell doesn't stall for the chld process but the foreground process stalls the parent shell

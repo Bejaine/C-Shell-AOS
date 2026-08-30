@@ -78,7 +78,18 @@ int main()
         }
         else
         {
-            execute_external_command(args);
+            int is_background = 0;
+            int last_arg_index = arg_count - 1;
+
+            // checking if the last token is & to assign background process and ensuring execvp doesn't try to execute it
+            if (last_arg_index >= 0 && strcmp(args[last_arg_index], "&") == 0)
+            {
+                is_background = 1;
+                args[last_arg_index] = NULL; 
+            }
+
+            // executing the external command with the foreground/background flag
+            execute_external_command(args, is_background); 
         }
 
         // freeing the allocated memory before the next loop iteration

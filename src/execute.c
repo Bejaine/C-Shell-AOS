@@ -5,7 +5,7 @@
 #include <sys/wait.h> // waitpid
 #include "../include/execute.h"
 
-void execute_external_command(char** args)
+void execute_external_command(char** args, int is_background)
 {
     // duplicating the current parent shell process using fork
     // process id using linux type pid_t giving a signed integer
@@ -33,11 +33,19 @@ void execute_external_command(char** args)
     } 
     else
     {
-        // parent waits for any of it's child processes with the same process group id as the calling process, using waitpid until a state change like termination, stopping or resumption of the child process occurs
-        int status;
-        if (waitpid(pid, &status, 0) == -1)
+        if (is_background)
         {
-            perror("waitpid: failed");
+            // parent shell doesn't wait for a background process
+            printf("Background Process PID: %d\n", pid);
+        }
+        else
+        {
+            // parent waits for any of it's child processes with the same process group id as the calling process, using waitpid until a state change like termination, stopping or resumption of the child process occurs
+            int status;
+            if (waitpid(pid, &status, 0) == -1)
+            {
+                perror("waitpid: failed");
+            }
         }
     }
 }
