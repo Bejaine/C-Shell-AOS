@@ -5,6 +5,7 @@
 #include "../include/input.h"
 #include "../include/builtins.h"
 #include "../include/history.h"
+#include "../include/execute.h"
 
 int main()
 {
@@ -77,8 +78,7 @@ int main()
         }
         else
         {
-            // catching commands that do not exist or aren't implemented
-            printf("command doesn't exist...\n");
+            execute_external_command(args);
         }
 
         // freeing the allocated memory before the next loop iteration

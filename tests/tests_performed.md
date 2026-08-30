@@ -126,3 +126,19 @@ history
 <user1@DESKTOP-6R849NP:~> 
 ```
 Outputs for the tests obtained correctly
+
+### FOREGROUND PROCESS EXECUTION
+
+Tested execvp execution by running external commands `ls` and `ls -a` and waitpid execution by running `sleep 3`
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c ../src/execute.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> ls
+builtins.c  execute.c  history.c  input.c  main.c  prompt.c  shell
+<user1@DESKTOP-6R849NP:~> ls -a
+.  ..  .history  builtins.c  execute.c  history.c  input.c  main.c  prompt.c  shell
+<user1@DESKTOP-6R849NP:~> fakecommand
+fakecommand: No such file or directory
+<user1@DESKTOP-6R849NP:~> sleep 3
+<user1@DESKTOP-6R849NP:~> 
+```
+Outputs for the external commands through execvp obtained correctly and parent shall waits 3 seconds as specified in the child process through waitpid
