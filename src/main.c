@@ -6,12 +6,16 @@
 #include "../include/builtins.h"
 #include "../include/history.h"
 #include "../include/execute.h"
+#include "../include/signals.h"
 
 int main()
 {
 
     // setting shell home directory
     init_shell_home();
+
+    // listening for finished background processes
+    setup_background_cleanup();
 
     // loading history from the history
     init_history();

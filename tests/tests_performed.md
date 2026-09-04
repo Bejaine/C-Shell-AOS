@@ -156,3 +156,14 @@ Background Process PID: 163058
 <user1@DESKTOP-6R849NP:~>
 ```
 Outputs for the background process invocation obtained correctly as the shell doesn't stall for the chld process but the foreground process stalls the parent shell
+
+### BACKGROUND PROCESS CLEANUP
+
+Tested with a background process
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c ../src/execute.c ../src/signals.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> sleep 3 &
+Background Process PID: 59120
+<user1@DESKTOP-6R849NP:~> CHILD PROCESS 59120 TERMINATED
+```
+Output obtained correctly as the background process was picked up and terminated
