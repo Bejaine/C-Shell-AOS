@@ -167,3 +167,33 @@ Background Process PID: 59120
 <user1@DESKTOP-6R849NP:~> CHILD PROCESS 59120 TERMINATED
 ```
 Output obtained correctly as the background process was picked up and terminated
+
+### INPUT/OUTPUT REDIRECTION
+
+Tested input and output redirection separately as well as a combined command for both input and output redirection
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ ls -a
+.  ..  .history  builtins.c  execute.c  history.c  input.c  main.c  prompt.c  signals.c
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c ../src/execute.c ../src/signals.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> ls -a > directory_list.txt
+<user1@DESKTOP-6R849NP:~> cat directory_list.txt
+.
+..
+.history
+builtins.c
+directory_list.txt
+execute.c
+history.c
+input.c
+main.c
+prompt.c
+shell
+signals.c
+<user1@DESKTOP-6R849NP:~> wc -l < directory_list.txt
+12
+<user1@DESKTOP-6R849NP:~> grep main < directory_list.txt > filtered_list.txt
+<user1@DESKTOP-6R849NP:~> cat filtered_list.txt
+main.c
+<user1@DESKTOP-6R849NP:~>
+```
+Outputs obtained correctly for all types of redirection
