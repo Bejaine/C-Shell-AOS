@@ -17,6 +17,9 @@ int main()
     // listening for finished background processes
     setup_background_cleanup();
 
+    // listening for the Ctrl+C signal
+    setup_sigint_handler();
+
     // loading history from the history
     init_history();
 

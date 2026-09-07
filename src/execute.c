@@ -5,6 +5,7 @@
 #include <sys/wait.h> // waitpid
 #include <fcntl.h> // open() flags O_RDONLY, O_WRONLY, dup2
 #include <string.h> // strcmp
+#include <signal.h> // signal(), SIGINT, SIG_IGN, SIG_DFL
 #include "../include/execute.h"
 
 void execute_external_command(char** args, int is_background)
@@ -48,6 +49,16 @@ void execute_external_command(char** args, int is_background)
 
         if (pid_read == 0)
         {
+
+            if (is_background)
+            {
+                signal(SIGINT, SIG_IGN);
+            }
+            else
+            {
+                signal(SIGINT, SIG_DFL);
+            }
+
             close(pipefd[0]); // read child process doesn't read from the pipe, so we close the read end file desriptor
             dup2(pipefd[1], STDOUT_FILENO); // rerouting the standard output from the terminal to the file descriptor of thw write command
             close(pipefd[1]); // closing the write file descriptor
@@ -70,6 +81,16 @@ void execute_external_command(char** args, int is_background)
 
         if (pid_write == 0)
         {
+            // since all children processes also get Ctrl+C signal, background process ignores it while the foreground process also terminates
+            if (is_background)
+            {
+                signal(SIGINT, SIG_IGN);
+            }
+            else
+            {
+                signal(SIGINT, SIG_DFL);
+            }
+
             close(pipefd[1]); // write child process doesn't write to the pipe, so we close the write end file desriptor
             dup2(pipefd[0], STDIN_FILENO); // rerouting the standard output from the terminal to the file descriptor of the read command
             close(pipefd[0]); // closing the read file descriptor
@@ -113,6 +134,15 @@ void execute_external_command(char** args, int is_background)
     } 
     else if (pid == 0)
     {
+        if (is_background)
+        {
+            signal(SIGINT, SIG_IGN);
+        }
+        else
+        {
+            signal(SIGINT, SIG_DFL);
+        }
+
         // for i/o redirection
         char* input_file = NULL;
         char* output_file = NULL;
@@ -202,6 +232,9 @@ void execute_external_command(char** args, int is_background)
         }
         else
         {
+            
+            current_foreground_pid = pid;
+
             // parent waits for any of it's child processes with the same process group id as the calling process, using waitpid until a state change like termination, stopping or resumption of the child process occurs
             int status;
             if (waitpid(pid, &status, 0) == -1)

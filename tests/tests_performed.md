@@ -211,3 +211,19 @@ main.c
 .  ..  .history  builtins.c  execute.c  history.c  input.c  input.txt  main.c  prompt.c  shell  signals.c
 ```
 Output obtained correctly as the file named main is obtained for the first test and the number of files are correct for the second test
+
+### SIGNAL HANDLING
+
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c ../src/execute.c ../src/signals.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> ^C
+<user1@DESKTOP-6R849NP:~> sleep 10
+^C
+<user1@DESKTOP-6R849NP:~> <user1@DESKTOP-6R849NP:~> sleep 10
+^C
+<user1@DESKTOP-6R849NP:~> <user1@DESKTOP-6R849NP:~> sleep 10 &                               
+Background Process PID: 12450
+<user1@DESKTOP-6R849NP:~> ^C
+<user1@DESKTOP-6R849NP:~> ^C
+<user1@DESKTOP-6R849NP:~> CHILD PROCESS 12450 TERMINATED
+```
