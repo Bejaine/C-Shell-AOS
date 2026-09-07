@@ -197,3 +197,17 @@ main.c
 <user1@DESKTOP-6R849NP:~>
 ```
 Outputs obtained correctly for all types of redirection
+
+### PIPING
+
+Tested with piped commands
+```
+user1@DESKTOP-6R849NP:~/aos/C-Shell-AOS/src$ gcc -Wall -Wextra ../src/main.c ../src/prompt.c ../src/input.c ../src/builtins.c ../src/history.c ../src/execute.c ../src/signals.c -o shell && ./shell
+<user1@DESKTOP-6R849NP:~> ls -a | grep main
+main.c
+<user1@DESKTOP-6R849NP:~> ls -l | wc -l
+10
+<user1@DESKTOP-6R849NP:~> ls -a
+.  ..  .history  builtins.c  execute.c  history.c  input.c  input.txt  main.c  prompt.c  shell  signals.c
+```
+Output obtained correctly as the file named main is obtained for the first test and the number of files are correct for the second test

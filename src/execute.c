@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> // fork, execvp
+#include <unistd.h> // fork, execvp, pipe
 #include <sys/types.h> // pid_t
 #include <sys/wait.h> // waitpid
 #include <fcntl.h> // open() flags O_RDONLY, O_WRONLY, dup2
@@ -9,6 +9,97 @@
 
 void execute_external_command(char** args, int is_background)
 {
+
+    // checking for pipe
+    int pipe_index = -1;
+    for (int i = 0; args[i] != NULL; i++)
+    {
+        if (strcmp(args[i], "|") == 0)
+        {
+            pipe_index = i;
+            break;
+        }
+    }
+
+    // piping
+    if (pipe_index != -1)
+    {
+        // splitting the command into two different commands for piping
+        args[pipe_index] = NULL;
+        char **left_cmd = args;
+        char **right_cmd = &args[pipe_index + 1];
+
+        // int pipe(int pipefd[2])
+        // the array pipefd[2] is used to return two file descriptors referring to the ends of the pipe, with pipefd[0] referring to the read end of the pipe and with pipefd[1] referring to the write end of the pipe
+        int pipefd[2];
+        if (pipe(pipefd) == -1)
+        {
+            perror("pipe failed");
+            return;
+        }
+
+        // forking the left (read) command as a child
+        pid_t pid_read = fork();
+        if (pid_read < 0)
+        {
+            perror("pipe: read fork failed");
+            return;
+        }
+
+        if (pid_read == 0)
+        {
+            close(pipefd[0]); // read child process doesn't read from the pipe, so we close the read end file desriptor
+            dup2(pipefd[1], STDOUT_FILENO); // rerouting the standard output from the terminal to the file descriptor of thw write command
+            close(pipefd[1]); // closing the write file descriptor
+
+            // execvp runs the left (read) command
+            if (execvp(left_cmd[0], left_cmd) == -1)
+            {
+                perror(left_cmd[0]);
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        // forking the left (write) command as a child
+        pid_t pid_write = fork();
+        if (pid_write < 0)
+        {
+            perror("pipe: write fork failed");
+            return;
+        }
+
+        if (pid_write == 0)
+        {
+            close(pipefd[1]); // write child process doesn't write to the pipe, so we close the write end file desriptor
+            dup2(pipefd[0], STDIN_FILENO); // rerouting the standard output from the terminal to the file descriptor of the read command
+            close(pipefd[0]); // closing the read file descriptor
+
+            if (execvp(right_cmd[0], right_cmd) == -1)
+            {
+                perror(right_cmd[0]);
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        // parent shell closes both ends of the pipe so the child processes don't wait for more data
+        close(pipefd[0]);
+        close(pipefd[1]);
+
+        if (is_background)
+        {
+            printf("Background Pipeline PIDs: %d, %d\n", pid_read, pid_write);
+        }
+        else
+        {
+            // waiting for both children to finish
+            waitpid(pid_read, NULL, 0);
+            waitpid(pid_write, NULL, 0);
+        }
+        
+        // returning early when the pipeline execution is finished
+        return; 
+    }
+
     // duplicating the current parent shell process using fork
     // process id using linux type pid_t giving a signed integer
     pid_t pid = fork();
